@@ -281,7 +281,7 @@ def plotEF(ef, vsteps=0.001, rf=0.0):
 
     plt.scatter(vols, rets, c = sr, marker = 'o', cmap='coolwarm')
     plt.scatter(minvol_vols, minvol_rets, c = 'r', s = 300, marker = '*', label='Minimum volatility')
-    plt.scatter(minsr_vols, maxsr_rets, c = 'g', s = 300, marker = '*', label='Maximum Sharpe ratio')
+    plt.scatter(minsr_vols, maxsr_rets, c = 'g', s = 300, marker = '*', label='Maximum sharpe ratio')
     plt.grid(True)
     plt.xlabel('expected volatility')
     plt.ylabel('expected return')
