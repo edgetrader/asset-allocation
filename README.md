@@ -24,5 +24,4 @@ https://github.com/quantopian/pyfolio
 
 ## Take a look at the report
 Clone the repo and run the jupyter notebook inside ./notebook/asset-allocation.ipynb
-
-Alternatively, you can check out the static html version at ./notebook/asset-allocation.html
+or access the link here: https://github.com/edgetrader/asset-allocation/blob/master/notebook/asset-allocation.ipynb
