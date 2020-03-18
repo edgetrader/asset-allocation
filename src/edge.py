@@ -51,55 +51,67 @@ def cumulative_returns_plot(returns, tickers):
 
 
 def plotTimeSeries(series, title='', xlabel='', ylabel='', tickermap=''): 
-    fig = plt.figure(figsize=FIG_SIZE)
-    plt.plot(series)
-
-    title_text_obj = plt.title(title, fontsize = 18, verticalalignment = 'bottom')
+    ax = series.plot(figsize=FIG_SIZE, fontsize=12, linewidth=3, linestyle='-')
+    ax.set_xlabel(xlabel, fontsize = 16)
+    ax.set_ylabel(ylabel, fontsize = 16)
+    
+    title_text_obj = ax.set_title(title, fontsize = 18, verticalalignment = 'bottom')
     title_text_obj.set_path_effects([patheffects.withSimplePatchShadow()])
-    pe = patheffects.withSimplePatchShadow(offset = (1, -1), shadow_rgbFace = (1,0,0), calpha = 0.8)
-
-    xlabel_obj = plt.xlabel(xlabel, fontsize = 16)
-    ylabel_obj = plt.ylabel(ylabel, fontsize = 16)
+    # pe = patheffects.withSimplePatchShadow(offset = (1, -1), shadow_rgbFace = (1,0,0), calpha = 0.8)
 
     names = series.columns
     if tickermap:
         names = names.map(tickermap)
         
-    plt.legend(names, fontsize = 16)
+    ax.legend(names, fontsize = 16)
     plt.show()
-    
+
 
 def plotReturnDistribution(returns, ticker, binsize=35, title=''):
     
-    fig = plt.figure(figsize=FIG_SIZE)
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
 
-    plt.hist(returns[ticker], bins=binsize, color='steelblue', density = True,
+    ax.hist(returns[ticker], bins=binsize, color='steelblue', density = True,
              alpha = 0.5, histtype ='stepfilled',edgecolor ='red' )
 
-    title_text_obj = plt.title(title, fontsize = 18, verticalalignment = 'bottom')
+    title_text_obj = ax.set_title(title, fontsize = 18, verticalalignment = 'bottom')
     title_text_obj.set_path_effects([patheffects.withSimplePatchShadow()])
 
     sigma, mu = returns[ticker].std(), returns[ticker].mean() # mean and standard deviation
     s = np.random.normal(mu, sigma, 1000)
 
-    count, bins, ignored = plt.hist(s, binsize, density=True, alpha = 0.1)
-    plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) * np.exp( - (bins - mu)**2 / (2 * sigma**2) ), 
+    count, bins, ignored = ax.hist(s, binsize, density=True, alpha = 0.1)
+    ax.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) * np.exp( - (bins - mu)**2 / (2 * sigma**2) ), 
             linewidth=1.5, color='r')
 
-    plt.annotate('Skewness: {}\n\nKurtosis: {}'.format(round(returns[ticker].skew(),2),
+    ax.annotate('Skewness: {}\n\nKurtosis: {}'.format(round(returns[ticker].skew(),2),
                                                        round(returns[ticker].kurtosis(),2)),
                  xy=(10,20), xycoords = 'axes points', xytext =(20,360), fontsize=14)
 
-    plt.xlabel('Values')
-    plt.ylabel('Frequency')
+    ax.set_xlabel('Values')
+    ax.set_ylabel('Frequency')
     
     plt.show()
 
 
-def plotCorrelationMatrix(matrix, type=1, title= ''):
-    fig = plt.figure(figsize=FIG_SIZE)
+def plotCorrelationMatrixWithCluster(matrix, title= ''):
+
+    fig = sns.clustermap(matrix, row_cluster=True, col_cluster=True, figsize=(10,10))  
 
     title_text_obj = plt.title(title, fontsize = 18, verticalalignment = 'bottom')
+    title_text_obj.set_path_effects([patheffects.withSimplePatchShadow()])
+    
+    plt.setp(fig.ax_heatmap.xaxis.get_majorticklabels(), rotation=90)
+    plt.setp(fig.ax_heatmap.yaxis.get_majorticklabels(), rotation=0)
+
+    plt.show()
+
+
+def plotCorrelationMatrix(matrix, type=1, title= ''):
+
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
+
+    title_text_obj = ax.set_title(title, fontsize = 18, verticalalignment = 'bottom')
     title_text_obj.set_path_effects([patheffects.withSimplePatchShadow()])
 
     if type == 1:
@@ -118,11 +130,12 @@ def plotCorrelationMatrix(matrix, type=1, title= ''):
     plt.ylim(b, t) # update the ylim(bottom, top) values
 
     plt.show()
+    
 
 def compareDistribution(series, tickers, title='', tickermap={}):    
-    fig4 = plt.figure(figsize=FIG_SIZE)
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
 
-    title_text_obj = plt.title(title, fontsize = 18, verticalalignment = 'bottom')
+    title_text_obj = ax.set_title(title, fontsize = 18, verticalalignment = 'bottom')
     title_text_obj.set_path_effects([patheffects.withSimplePatchShadow()])
 
     for ticker in tickers:
@@ -131,11 +144,10 @@ def compareDistribution(series, tickers, title='', tickermap={}):
     names = series.columns
     if tickermap:
         names = names.map(tickermap)
-    plt.legend(names, fontsize = 12)
 
-    plt.title(title, fontsize=18)
-    plt.xlabel('Returns Distribution', fontsize= 14)
-    plt.ylabel('Frequency',fontsize=14)
+    ax.legend(names, fontsize = 12)
+    ax.set_xlabel('Returns Distribution', fontsize= 14)
+    ax.set_ylabel('Frequency',fontsize=14)
     plt.show()
 
 
