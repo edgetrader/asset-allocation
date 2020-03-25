@@ -2,6 +2,7 @@
 notebook2/
 analysis/
 data/
+issue/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
